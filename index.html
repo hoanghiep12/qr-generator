@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center">
+    <h1 class="text-2xl font-bold mb-4">QR Code Generator</h1>
+    <input
+      id="qrInput"
+      type="text"
+      placeholder="Enter your text..."
+      class="w-full p-2 border border-gray-300 rounded mb-4"
+    />
+    <button
+      onclick="generateQR()"
+      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+    >
+      Generate
+    </button>
+
+    <div id="qrContainer" class="my-6"></div>
+
+    <a
+      id="downloadBtn"
+      href="#"
+      download="qrcode.png"
+      class="hidden bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+    >
+      Download QR
+    </a>
+  </div>
+
+  <script>
+    function generateQR() {
+      const input = document.getElementById('qrInput').value;
+      const container = document.getElementById('qrContainer');
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      container.innerHTML = '';
+      if (!input.trim()) {
+        alert("Please enter some text.");
+        return;
+      }
+
+      QRCode.toCanvas(input, { width: 200 }, function (err, canvas) {
+        if (err) return console.error(err);
+        container.appendChild(canvas);
+
+        const dataURL = canvas.toDataURL("image/png");
+        downloadBtn.href = dataURL;
+        downloadBtn.classList.remove("hidden");
+      });
+    }
+  </script>
+</body>
+</html>
